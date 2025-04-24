@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- Google Search Console Meta Tag -->
+  <meta name="google-site-verification" content="your-verification-code" />
+<meta name="google-site-verification" content="5TURBnXkxhzIn8TA3exSy0GCDyKDCoEU9loHqsc6muI" />
+  <title>Spicy Bites</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>Spicy Bites Takeaway</h1>
+
+  <div id="menu">
+    <h2>Menu</h2>
+    <div class="item">
+      <span>Pizza</span>
+      <button onclick="addToCart('Pizza', 10)">Add</button>
+    </div>
+    <div class="item">
+      <span>Burger</span>
+      <button onclick="addToCart('Burger', 8)">Add</button>
+    </div>
+  </div>
+
+  <div id="cart">
+    <h2>Your Cart</h2>
+    <ul id="cart-items"></ul>
+    <p>Total: $<span id="total">0</span></p>
+  </div>
+
+  <div id="delivery-info">
+    <h2>Delivery Details</h2>
+    <form id="delivery-form" onsubmit="submitOrder(event)">
+      <label for="name">Name:</label><br />
+      <input type="text" id="name" name="name" required /><br />
+
+      <label for="address">Delivery Address:</label><br />
+      <textarea id="address" name="address" required></textarea><br />
+
+      <label for="location">City or Area:</label><br />
+      <input type="text" id="location" name="location" required /><br />
+
+      <button type="submit">Place Order</button>
+    </form>
+  </div>
+
+  <script>
+    let cart = [];
+    let total = 0;
+
+    function addToCart(item, price) {
+      cart.push({ item, price });
+      total += price;
+      updateCart();
+    }
+
+    function updateCart() {
+      const cartItems = document.getElementById('cart-items');
+      cartItems.innerHTML = '';
+      cart.forEach((entry, index) => {
+        const li = document.createElement('li');
+        li.textContent = `${entry.item} - $${entry.price}`;
+        cartItems.appendChild(li);
+      });
+      document.getElementById('total').textContent = total.toFixed(2);
+    }
+
+    function submitOrder(event) {
+      event.preventDefault();
+
+      const name = document.getElementById('name').value;
+      const address = document.getElementById('address').value;
+      const location = document.getElementById('location').value;
+
+      if (cart.length === 0) {
+        alert("Please add items to your cart first.");
+        return;
+      }
+
+      const orderDetails = {
+        name,
+        address,
+        location,
+        cart,
+        total
+      };
+
+      console.log("Order submitted:", orderDetails);
+      alert(`Thank you, ${name}! Your order has been placed for delivery to: ${address}, ${location}.`);
+
+      // Reset
+      document.getElementById('delivery-form').reset();
+      cart = [];
+      total = 0;
+      updateCart();
+    }
+  </script>
+</body>
+</html>
